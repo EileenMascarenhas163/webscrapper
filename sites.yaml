@@ -1,4 +1,3 @@
-
 sites:
   - name: ecolab_sds
     page_urls:
@@ -8,14 +7,6 @@ sites:
       - ecolab.com
     pagination:
       type: click
-      next_selector: none
-
-  # Example future site
-  # - name: another_site
-  #   page_urls:
-  #     - https://example.com/documents
-  #   pdf_selector: "a[href$='.pdf']"
-  #   allowed_domain_suffixes:
-  #     - example.com
-  #   pagination:
-  #     type: none
+      # This is a common selector for 'Next' arrows in many libraries.
+      # If they use numbers, the script's numeric logic will attempt to find '2', '3', etc.
+      next_selector: "a.sds-pgli-item-arrow.sds-frontArrow-item.sdsFront"
