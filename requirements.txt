@@ -1,0 +1,4 @@
+scrapy
+pyyaml
+requests
+pip install playwright pyyaml requests
