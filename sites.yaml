@@ -9,4 +9,23 @@ sites:
       type: click
       # This is a common selector for 'Next' arrows in many libraries.
       # If they use numbers, the script's numeric logic will attempt to find '2', '3', etc.
-      next_selector: "a.sds-pgli-item-arrow.sds-frontArrow-item.sdsFront"
+      next_selector: "a.sds-pgli-item-arrow.sds-frontArrow-item"
+
+
+   "name": "news",
+        "baseSelector": "div.sds-searchResult",
+        "fields": [
+            {"name": "title", "selector": "h2", "type": "text"},
+            {"name": "link", "selector": "a.sds-downloadBtn", "type": "attribute", "attribute": "href"}
+        ]
+    const btn = document.querySelector('a.sds-pgli-item-arrow.sds-frontArrow-item'); if(btn) btn.click();
+    https://www.ecolab.com/sds-search?languageCode=English
+
+    https://www.3m.com/3M/en_US/company-us/SDS-search/results/?gsaAction=msdsSRA&msdsLocale=en_US&co=ptn&q=3
+
+    "name": "news",
+        "baseSelector": "div#MMM--searchResultItem",
+        "fields": [
+            {"name": "title", "selector": "div.MMM--searchResultItem-hd", "type": "text"},
+            {"name": "link", "selector": "div#MMM--searchResultItem > a", "type": "attribute", "attribute": "href"}
+        ]
