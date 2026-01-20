@@ -16,7 +16,7 @@ class ModelFee(BaseModel):
 
 class ModelFeeTool(BaseTool):
     name: str = "ModelFeeTool"
-    description: str = "Extracts model fees for input and output tokens from the given pricing page."
+    description: str = "Extracts model fees for input an    d output tokens from the given pricing page."
 
     def _run(self, url: str):
         return asyncio.run(self._async_run(url))

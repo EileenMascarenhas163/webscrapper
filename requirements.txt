@@ -2,3 +2,12 @@ scrapy
 pyyaml
 requests
 pip install playwright pyyaml requests
+
+#langgraph
+pip install crawl4ai langgraph pydantic langchain-openai
+crawl4ai-setup
+
+
+
+pip install langgraph langchain openai pydantic crawl4ai playwright apscheduler python-dotenv
+playwright install
