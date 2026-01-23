@@ -1,3 +1,12 @@
+main file ==== crawl_demo.py
+demo.png
+ecolab_link
+
+
+
+
+
+
 pip install "crawl4ai @ git+https://github.com/unclecode/crawl4ai.git" transformers torch nltk pydantic
 python -m playwright install chromium
 
