@@ -1,3 +1,5 @@
+#pip install crawl4ai langgraph pydantic langchain-openai pandas requests openpyxl
+#crawl4ai-setup
 import asyncio
 import json
 import pandas as pd
@@ -11,10 +13,10 @@ async def main():
     # 2. Define the schema once
     new_schema = {
         "name": "news",
-        "baseSelector": "article.o-search-result-product",
+        "baseSelector": "div.sds-searchResult",
         "fields": [
            # {"name": "title", "selector": "h2", "type": "text"},
-            {"name": "link", "selector": "h2.h3", "type": "text"}
+            {"name": "link", "selector": "a.sds-downloadBtn", "type": "attribute", "attribute": "href"}
         ]
     }
     
@@ -29,39 +31,19 @@ async def main():
             
             # For the first page, we just visit the URL. 
             # For subsequent pages, we execute the JS click and wait for content.
-     # Updated JS code for scrolling and waiting
-            js_scroll_and_load = """
-            async () => {
-                const scrollDelay = 3000; // Time to wait for new content (ms)
-                let lastHeight = document.body.scrollHeight;
-                
-                while (true) {
-                    // Scroll to the bottom
-                    window.scrollTo(0, document.body.scrollHeight);
-                    
-                    // Wait for potential network activity/rendering
-                    await new Promise(resolve => setTimeout(resolve, scrollDelay));
-                    
-                    // Check if new content was loaded
-                    let newHeight = document.body.scrollHeight;
-                    if (newHeight === lastHeight) {
-                        break; // No more content loaded
-                    }
-                    lastHeight = newHeight;
-                }
-            };
-            """
+            js_next = "const btn = document.querySelector('a.sds-pgli-item-arrow.sds-frontArrow-item'); if (btn) {btn.click();await new Promise(r => setTimeout(r, 50000));}"
+            
             config = CrawlerRunConfig(
                 session_id=session_id,
                 extraction_strategy=extraction_strategy,
-                js_code=js_scroll_and_load if page_count > 1 else None,
+                js_code=js_next if page_count > 1 else None,
                 # Wait for the next set of results to load after clicking
-                wait_for="css:div.o-search-result-product",
+                wait_for="css:div.sds-searchResult",
                 cache_mode=CacheMode.BYPASS
             )
 
             result = await crawler.arun(
-                url="https://www.nouryon.com/product-search/",
+                url="https://www.ecolab.com/sds-search?languageCode=English",
                 config=config
             )
 
@@ -79,7 +61,7 @@ async def main():
                 page_count += 1
                 
                 # Optional: limit pages to avoid infinite loops during testing
-                if page_count > 1: break 
+                if page_count > 30: break 
             else:
                 print(f"Failed to crawl page {page_count}: {result.error_message}")
                 break
@@ -89,7 +71,7 @@ async def main():
         # Drop duplicates in case the crawler grabbed the same page twice
         #df = df.drop_duplicates(subset=['link'])
         
-        file_name = "nouryon.xlsx"
+        file_name = "ecolab_links.xlsx"
         df.to_excel(file_name, index=False)
         print(f"\nFinished! Total unique links saved: {len(df)}")
     else:

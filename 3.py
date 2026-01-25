@@ -63,4 +63,4 @@ async def final_stable_deep_crawl(start_url, keyword, output_dir="llm_ready_data
 
 if __name__ == "__main__":
     # Example: match 'item' to get HN discussion pages
-    asyncio.run(final_stable_deep_crawl("https://news.ycombinator.com", "news"))
+    asyncio.run(final_stable_deep_crawl("https://www.merck.com/products/", "news"))
