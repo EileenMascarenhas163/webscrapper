@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 import os
 
-EXCEL_FILE = "links.xlsx"     # your Excel file
+EXCEL_FILE = "ecolab_links.xlsx"     # your Excel file
 COLUMN_NAME = "Links"         # column containing URLs
 DOWNLOAD_DIR = "downloads"    # local folder
 
