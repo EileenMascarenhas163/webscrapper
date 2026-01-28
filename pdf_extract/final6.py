@@ -8,30 +8,34 @@ input_folder = "./input_pdfs"
 output_file = "sds_section_1_only.json"
 
 def extract_section_one(raw_text, file_link):
-    # 1. Clean up "Noise" (Ecolab specific footers/dates)
+    # 1. Clean up "Noise"
     cleaned_text = re.sub(r'\d{6,}\s*-\d{2}.*?\d{2}\.\d{2}\.\d{4}.*?(\d\s/\s\d)', '', raw_text)
     
-    # 2. Split by SECTION keyword - Handles "SECTION 1.", "SECTION 1:", "SECTION 1  "
-    # This regex looks for 'SECTION', then space, then digits, then an optional punctuation
-    sections = re.split(r'(SECTION\s+\d+[\.\:]?)', cleaned_text, flags=re.IGNORECASE)
+    # 2. Split by SECTION keyword - STRICT MATCH for "1"
+    # \b1\b ensures we only match the number 1, not 11, 12, or 13.
+    sections = re.split(r'(SECTION\s+\b1\b[\.\:]?)', cleaned_text, flags=re.IGNORECASE)
     
     result = {}
     
-    # 3. Look for the first section specifically
-    for i in range(1, len(sections), 2):
-        header = sections[i].strip()
-        # Look for "SECTION 1" in the header string
-        if re.search(r'SECTION\s+1', header, re.IGNORECASE):
-            content = sections[i+1].strip() if i+1 < len(sections) else ""
-            # Clean up whitespace and newlines
-            clean_content = re.sub(r'\s+', ' ', content).strip()
-            
-            result["SECTION_1"] = {
-                "title": header,
-                "body": clean_content,
-                "pdf_link": file_link
-            }
-            break # We only want Section 1, so stop here
+    # 3. Process the split sections
+    # If the split worked, the header is at index 1 and content at index 2
+    if len(sections) > 1:
+        header = sections[1].strip()
+        content = sections[2].strip()
+        
+        # We need to stop "content" before the next section starts
+        # Split the content by any "SECTION [Number]" to keep only the body of Section 1
+        body_parts = re.split(r'SECTION\s+\d+', content, flags=re.IGNORECASE)
+        clean_content = body_parts[0].strip()
+        
+        # Clean up whitespace
+        clean_content = re.sub(r'\s+', ' ', clean_content).strip()
+        
+        result["SECTION_1"] = {
+            "title": header,
+            "body": clean_content,
+            "pdf_link": file_link
+        }
             
     return result
 

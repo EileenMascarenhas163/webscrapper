@@ -3,7 +3,7 @@ import json
 from PyPDF2 import PdfReader
 import re
 
-file= "./input_pdfs/AR-Z8-900245-02-STAINBLASTER ENZYME BOOST.PDF"
+file= "./input_pdfs/AU-EN-914474-CLEANTEC DRY LUBE.PDF"
 file_path = Path(file).resolve()
 
 file_link = f"file:///{file_path.as_posix()}"
